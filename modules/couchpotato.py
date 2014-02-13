@@ -131,6 +131,7 @@ def xhr_couchpotato(status='active'):
 
     return render_template(template,
         url=couchpotato_url(),
+        app_link=couchpotato_url_no_api(),
         couchpotato=couchpotato,
         profiles=profiles,
         compact_view=get_setting_value('couchpotato_compact') == '1',
@@ -374,7 +375,7 @@ def cp_get_movie(id):
     """
     try:
         logger.log('CouchPotato :: Retrieving movie info', 'INFO')
-        result = couchpotato_api('movie.get', 'id=%s' % id)
+        result = couchpotato_api('media.get', 'id=%s' % id)
         try:
             logger.log('CouchPotato :: Getting quality profiles', 'INFO')
             profiles = couchpotato_api('profile.list')
