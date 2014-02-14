@@ -668,7 +668,11 @@ $(document).ready(function() {
   $(document).on('click', '#library .play', function() {
     show_library_loading();
 
-    $.get(WEBROOT + $(this).closest('.media').data('xhr_play'), function() {
+    $.get(WEBROOT + $(this).closest('.media').data('xhr_play'), function(data) {
+      data2='#EXTM3U\n';
+      data2+=data;
+      uriContent = "data:application/m3u," + encodeURIComponent(data2);
+      window.open(uriContent, '_self');
       hide_library_loading();
     });
   });
@@ -729,20 +733,14 @@ $(document).ready(function() {
 
   //Check for resume position when clicking video
   $(document).on('click', '#library .resume_check', function() {
-    var xhr_play = $(this).closest('.media').data('xhr_play');
-
     show_library_loading();
 
-    $.get(WEBROOT + $(this).closest('.media').data('xhr_resume_check'), function(data) {
+    $.get(WEBROOT + $(this).closest('.media').data('xhr_play'), function(data) {
+      data2='#EXTM3U\n';
+      data2+=data;
+      uriContent = "data:application/m3u," + encodeURIComponent(data2);
+      window.open(uriContent, '_self');
       hide_library_loading();
-      if (data.resume) {
-        var popup = $(data.template);
-        $('body').append(popup);
-        popup.showPopup({ dispose: true });
-      }
-      else {
-        $.get(WEBROOT+xhr_play);
-      }
     });
   });
 

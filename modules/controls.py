@@ -16,7 +16,23 @@ xbmc_error = 'There was a problem connecting to the XBMC server'
 def xhr_play_media(file_type, media_type, media_id):
     logger.log('CONTROLS :: Playing %s' % media_type, 'INFO')
     xbmc = jsonrpclib.Server(server_api_address())
+    serversettings = server_settings()
     position = 0
+
+    try:
+        if media_type == 'episode':
+            video = xbmc.VideoLibrary.GetEpisodeDetails(episodeid=media_id, properties=['file'])['episodedetails']['file']
+        elif media_type == 'movie':
+            video = xbmc.VideoLibrary.GetMovieDetails(movieid=media_id, properties=['file'])['moviedetails']['file']
+    except:
+        logger.log('CONTROLS :: Failed to retrieve path to %s' % media_type, 'DEBUG')
+        return jsonify({ 'failed': True })
+
+    path = xbmc.Files.PrepareDownload(path=video)['details']['path']
+
+    url = 'http://'+serversettings['username']+':'+serversettings['password']+'@'+serversettings['hostname']+':'+serversettings['port']+'/'+path
+
+    return url
 
     if file_type == 'video':
         id = 1
