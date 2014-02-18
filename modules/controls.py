@@ -28,11 +28,7 @@ def xhr_play_media(file_type, media_type, media_id):
         logger.log('CONTROLS :: Failed to retrieve path to %s' % media_type, 'DEBUG')
         return jsonify({ 'failed': True })
 
-    path = xbmc.Files.PrepareDownload(path=video)['details']['path']
-
-    url = 'http://'+serversettings['username']+':'+serversettings['password']+'@'+serversettings['hostname']+':'+serversettings['port']+'/'+path
-
-    return url
+    return video
 
     if file_type == 'video':
         id = 1
@@ -652,8 +648,4 @@ def xhr_download_media(file_type, media_type, media_id):
         logger.log('CONTROLS :: Failed to retrieve path to %s' % media_type, 'DEBUG')
         return jsonify({ 'failed': True })
 
-    path = xbmc.Files.PrepareDownload(path=video)['details']['path']
-
-    url = 'http://'+serversettings['username']+':'+serversettings['password']+'@'+serversettings['hostname']+':'+serversettings['port']+'/'+path
-
-    return url
+    return video

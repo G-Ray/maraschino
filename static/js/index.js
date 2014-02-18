@@ -719,9 +719,10 @@ $(document).ready(function() {
   $(document).on('click', '#library .download', function() {
     $.get(WEBROOT + $(this).closest('.media').data('xhr_download'), function(data) {
         var link = document.createElement('a');
+
         link.href = data;
 
-        var fileName = data.substring(data.lastIndexOf('%2f') + 3, data.length);
+        var fileName = data.substring(data.lastIndexOf('/') + 1);
         fileName = decodeURI(fileName);
         link.download = fileName;
 
@@ -735,11 +736,25 @@ $(document).ready(function() {
   $(document).on('click', '#library .resume_check', function() {
     show_library_loading();
 
+    //Hack to create an m3u file instead of playing from xbmc
     $.get(WEBROOT + $(this).closest('.media').data('xhr_play'), function(data) {
-      data2='#EXTM3U\n';
-      data2+=data;
-      uriContent = "data:application/m3u," + encodeURIComponent(data2);
-      window.open(uriContent, '_self');
+      var link = document.createElement('a');
+
+      var fileName = data.substring(data.lastIndexOf('/') + 1);
+      //Remove file extension
+      fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+      fileName = decodeURI(fileName) + '.m3u';
+      link.download = fileName;
+
+      file = '#EXTM3U\n';
+      file += data;
+
+      uriContent = "data:application/m3u," + encodeURIComponent(file);
+      link.href = uriContent;
+
+      var e = document.createEvent('MouseEvents');
+      e.initEvent('click', true, true);
+      link.dispatchEvent(e);
       hide_library_loading();
     });
   });
