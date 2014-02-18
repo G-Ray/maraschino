@@ -9,7 +9,7 @@ from flask import json
 
 # define master repo as user and branch in github repo
 user = 'G-Ray'
-branch = 'master'
+branch = 'mitc'
 
 def joinRundir(path):
     """Join rundir with 'path'"""
